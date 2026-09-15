@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 
+const productRoutes = require("./routes/product.routes");
+
 dotenv.config();
 
 const app = express();
@@ -12,6 +14,8 @@ app.get("/", (req, res) => {
         message: "Product Microservice is running"
     });
 });
+
+app.use("/products", productRoutes);
 
 const PORT = process.env.PORT || 3000;
 
