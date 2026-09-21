@@ -18,8 +18,27 @@ function getProduct(req, res) {
 
     res.status(200).json(product);
 }
+function createProduct(req, res) {
+    const { name, price, category, stock } = req.body;
+
+    if (!name || price === undefined || !category || stock === undefined) {
+        return res.status(400).json({
+            message: "name, price, category and stock are required"
+        });
+    }
+
+    const product = productsServices.createProduct({
+        name,
+        price,
+        category,
+        stock
+    });
+
+    res.status(201).json(product);
+}
 
 module.exports = {
     getProducts,
-    getProduct
+    getProduct,
+    createProduct
 };
