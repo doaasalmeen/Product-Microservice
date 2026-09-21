@@ -36,9 +36,30 @@ function createProduct(req, res) {
 
     res.status(201).json(product);
 }
+function updateProduct(req, res) {
+    const id = Number(req.params.id);
+
+    const { name, price, category, stock } = req.body;
+
+    const product = productsServices.updateProduct(id, {
+        name,
+        price,
+        category,
+        stock
+    });
+
+    if (!product) {
+        return res.status(404).json({
+            message: "Product not found"
+        });
+    }
+
+    res.status(200).json(product);
+}
 
 module.exports = {
     getProducts,
     getProduct,
-    createProduct
+    createProduct,
+    updateProduct
 };

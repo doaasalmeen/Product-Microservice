@@ -19,9 +19,27 @@ function createProduct(data) {
 
     return newProduct;
 }
+function updateProduct(id, data) {
+    const index = products.findIndex(product => product.id === id);
+
+    if (index === -1) {
+        return null;
+    }
+
+    products[index] = {
+        id,
+        name: data.name,
+        price: data.price,
+        category: data.category,
+        stock: data.stock
+    };
+
+    return products[index];
+}
 
 module.exports = {
     getAllProducts,
     getProductById,
-    createProduct
+    createProduct,
+    updateProduct
 };
