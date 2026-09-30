@@ -1,3 +1,4 @@
+const { param } = require("../routes/product.routes");
 const productsServices = require("../services/product.service");
 
 function getProducts(req, res) {
@@ -56,10 +57,24 @@ function updateProduct(req, res) {
 
     res.status(200).json(product);
 }
+function deleteProduct(req, res) {
+    const id = Number(req.params.id);
+
+    const deleted = productsServices.deleteProduct(id);
+
+    if(!deleted){
+        return res.status(404).json({
+            message : "product not found"
+        });
+    }
+    res.status(204).send();
+
+}
 
 module.exports = {
     getProducts,
     getProduct,
     createProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
 };

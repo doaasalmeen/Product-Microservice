@@ -36,10 +36,22 @@ function updateProduct(id, data) {
 
     return products[index];
 }
+function deleteProduct(id) {
+    const index = products.findIndex(product => product.id === id);
+
+    if (index === -1) {
+        return false;
+    }
+
+    products.splice(index, 1);
+
+    return true;
+}
 
 module.exports = {
     getAllProducts,
     getProductById,
     createProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
 };
