@@ -1,5 +1,4 @@
-const { param } = require("../routes/product.routes");
-const productsServices = require("../services/product.service");
+import productsServices from "../services/product.service.js";
 
 function getProducts(req, res) {
     const products = productsServices.getAllProducts();
@@ -71,7 +70,7 @@ function deleteProduct(req, res) {
 
 }
 
-module.exports = {
+export {
     getProducts,
     getProduct,
     createProduct,

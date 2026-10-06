@@ -15,16 +15,19 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/doaasalmeen/Product-Microservice/issues"
   },
   "homepage": "https://github.com/doaasalmeen/Product-Microservice#readme",
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
     "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.3",
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.31.11",
     "nodemon": "^3.1.14"
   }
 }

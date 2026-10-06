@@ -1,4 +1,4 @@
-const products = require("../data/products");
+import products from "../data/products.js";
 
 function getAllProducts() {
     return products;
@@ -48,7 +48,7 @@ function deleteProduct(id) {
     return true;
 }
 
-module.exports = {
+export default {
     getAllProducts,
     getProductById,
     createProduct,
