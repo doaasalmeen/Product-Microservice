@@ -1,57 +1,51 @@
-import products from "../data/products.js";
+import { eq } from "drizzle-orm";
 
-function getAllProducts() {
-    return products;
+import { db } from "../db/index.js";
+import { products } from "../db/schema.js";
+
+export async function getAllProducts() {
+    return await db.select().from(products);
 }
-function getProductById(id) {
-    return products.find(product => product.id === id);
+export async function getProductById(id) {
+    const result = await db
+        .select()
+        .from(products)
+        .where(eq(products.id, id));
+
+    return result[0];
 }
-function createProduct(data) {
-    const newProduct = {
-        id: products.length + 1,
-        name: data.name,
-        price: data.price,
-        category: data.category,
-        stock: data.stock
-    };
+export async function createProduct(data) {
+    const result = await db
+        .insert(products)
+        .values({
+            name: data.name,
+            price: data.price,
+            category: data.category,
+            stock: data.stock
+        })
+        .returning();
 
-    products.push(newProduct);
-
-    return newProduct;
+    return result[0];
 }
-function updateProduct(id, data) {
-    const index = products.findIndex(product => product.id === id);
-
-    if (index === -1) {
-        return null;
-    }
-
-    products[index] = {
-        id,
-        name: data.name,
-        price: data.price,
-        category: data.category,
-        stock: data.stock
-    };
-
-    return products[index];
+export async function updateProduct(id, data) {
+    const result = await db
+        .update(products)
+        .set({
+            name: data.name,
+            price: data.price,
+            category: data.category,
+            stock: data.stock
+        })
+        .where(eq(products.id, id))
+        .returning();
+    
+    return result[0];
 }
-function deleteProduct(id) {
-    const index = products.findIndex(product => product.id === id);
-
-    if (index === -1) {
-        return false;
-    }
-
-    products.splice(index, 1);
-
-    return true;
+export async function deleteProduct(id) {
+    const result = await db
+        .delete(products)
+        .where(eq(products.id, id))
+        .returning();
+    
+    return result[0];
 }
-
-export default {
-    getAllProducts,
-    getProductById,
-    createProduct,
-    updateProduct,
-    deleteProduct
-};
