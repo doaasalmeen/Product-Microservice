@@ -1,3 +1,11 @@
 npm init -y 
 npm install express dotenv  
 npm install --save-dev nodemon
+# Generate the migration
+# npx drizzle-kit generate
+
+# Run the migration
+# npx drizzle-kit migrate
+
+# Check the database
+# npx drizzle-kit studio

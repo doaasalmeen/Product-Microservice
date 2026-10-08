@@ -1,0 +1,7 @@
+CREATE TABLE "products" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"price" integer NOT NULL,
+	"category" text NOT NULL,
+	"stock" integer NOT NULL
+);
