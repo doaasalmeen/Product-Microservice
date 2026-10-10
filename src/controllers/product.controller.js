@@ -1,79 +1,96 @@
-import productsServices from "../services/product.service.js";
+import * as productService from "../services/product.service.js";
 
-function getProducts(req, res) {
-    const products = productsServices.getAllProducts();
+export async function getProducts(req, res, next) {
+    try {
+        const products = await productService.getAllProducts();
 
-    res.status(200).json(products);
-}
-function getProduct(req, res) {
-    const id = Number(req.params.id);
-
-    const product = productsServices.getProductById(id);
-
-    if (!product) {
-        return res.status(404).json({
-            message: "Product not found"
-        });
+        res.status(200).json(products);
+    } catch (error) {
+        next(error);
     }
-
-    res.status(200).json(product);
 }
-function createProduct(req, res) {
-    const { name, price, category, stock } = req.body;
+export async function getProduct(req, res, next) {
+     try {
+        const id = Number(req.params.id);
 
-    if (!name || price === undefined || !category || stock === undefined) {
-        return res.status(400).json({
-            message: "name, price, category and stock are required"
-        });
+        const product = await productService.getProductById(id);
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        next(error);
     }
-
-    const product = productsServices.createProduct({
-        name,
-        price,
-        category,
-        stock
-    });
-
-    res.status(201).json(product);
 }
-function updateProduct(req, res) {
-    const id = Number(req.params.id);
+export async function createProduct(req, res, next) {
+     try {
+        const { name, price, category, stock } = req.body;
 
-    const { name, price, category, stock } = req.body;
+        if (
+            !name ||
+            price === undefined ||
+            !category ||
+            stock === undefined
+        ) {
+            return res.status(400).json({
+                message: "name, price, category and stock are required"
+            });
+        }
 
-    const product = productsServices.updateProduct(id, {
-        name,
-        price,
-        category,
-        stock
-    });
-
-    if (!product) {
-        return res.status(404).json({
-            message: "Product not found"
+        const product = await productService.createProduct({
+            name,
+            price,
+            category,
+            stock
         });
+
+        res.status(201).json(product);
+    } catch (error) {
+        next(error);
     }
-
-    res.status(200).json(product);
 }
-function deleteProduct(req, res) {
-    const id = Number(req.params.id);
+export async function updateProduct(req, res) {
+    try {
+        const id = Number(req.params.id);
 
-    const deleted = productsServices.deleteProduct(id);
+        const { name, price, category, stock } = req.body;
 
-    if(!deleted){
-        return res.status(404).json({
-            message : "product not found"
+        const product = await productService.updateProduct(id, {
+            name,
+            price,
+            category,
+            stock
         });
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        next(error);
     }
-    res.status(204).send();
-
 }
+export async function deleteProduct(req, res) {
+     try {
+        const id = Number(req.params.id);
 
-export {
-    getProducts,
-    getProduct,
-    createProduct,
-    updateProduct,
-    deleteProduct
-};
+        const product = await productService.deleteProduct(id);
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        res.status(204).send();
+    } catch (error) {
+        next(error);
+    }
+}
