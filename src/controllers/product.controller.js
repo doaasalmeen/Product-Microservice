@@ -1,4 +1,15 @@
+
 import * as productService from "../services/product.service.js";
+
+function parseProductId(value) {
+    const id = Number(value);
+
+    if (!Number.isSafeInteger(id) || id <= 0) {
+        return null;
+    }
+
+    return id;
+}
 
 export async function getProducts(req, res, next) {
     try {
@@ -9,9 +20,16 @@ export async function getProducts(req, res, next) {
         next(error);
     }
 }
+
 export async function getProduct(req, res, next) {
-     try {
-        const id = Number(req.params.id);
+    try {
+        const id = parseProductId(req.params.id);
+
+        if (id === null) {
+            return res.status(400).json({
+                message: "Product ID must be a positive integer"
+            });
+        }
 
         const product = await productService.getProductById(id);
 
@@ -26,45 +44,28 @@ export async function getProduct(req, res, next) {
         next(error);
     }
 }
+
 export async function createProduct(req, res, next) {
-     try {
-        const { name, price, category, stock } = req.body;
-
-        if (
-            !name ||
-            price === undefined ||
-            !category ||
-            stock === undefined
-        ) {
-            return res.status(400).json({
-                message: "name, price, category and stock are required"
-            });
-        }
-
-        const product = await productService.createProduct({
-            name,
-            price,
-            category,
-            stock
-        });
+    try {
+        const product = await productService.createProduct(req.body);
 
         res.status(201).json(product);
     } catch (error) {
         next(error);
     }
 }
-export async function updateProduct(req, res) {
+
+export async function updateProduct(req, res, next) {
     try {
-        const id = Number(req.params.id);
+        const id = parseProductId(req.params.id);
 
-        const { name, price, category, stock } = req.body;
+        if (id === null) {
+            return res.status(400).json({
+                message: "Product ID must be a positive integer"
+            });
+        }
 
-        const product = await productService.updateProduct(id, {
-            name,
-            price,
-            category,
-            stock
-        });
+        const product = await productService.updateProduct(id, req.body);
 
         if (!product) {
             return res.status(404).json({
@@ -77,9 +78,16 @@ export async function updateProduct(req, res) {
         next(error);
     }
 }
-export async function deleteProduct(req, res) {
-     try {
-        const id = Number(req.params.id);
+
+export async function deleteProduct(req, res, next) {
+    try {
+        const id = parseProductId(req.params.id);
+
+        if (id === null) {
+            return res.status(400).json({
+                message: "Product ID must be a positive integer"
+            });
+        }
 
         const product = await productService.deleteProduct(id);
 
@@ -89,7 +97,10 @@ export async function deleteProduct(req, res) {
             });
         }
 
-        res.status(204).send();
+        res.status(200).json({
+            message: "Product deleted successfully",
+            product
+        });
     } catch (error) {
         next(error);
     }
